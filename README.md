@@ -26,9 +26,17 @@ Under System Variables, find and select Path, then click Edit. Click New, and ad
 ```
 C:\ffmpeg\bin
 ```
+Open Command Prompt (Win + R, type cmd, and hit Enter) to verify the installation (this is crucial)
+
+Type:
+```
+ffmpeg -version
+```
 
 3. Save the given script "main" as {whatevername}.py
 
-4.  
+4.  Run the script on CMD (administrative permissions are a good to have!)
 
+
+In case of any difficulty, contact me or just ask Chatgpt!
 
