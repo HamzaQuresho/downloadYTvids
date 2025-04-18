@@ -1,0 +1,26 @@
+import yt_dlp
+
+# List of YouTube video URLs
+video_urls = [
+    "https://youtu.be/URL-0",
+    "https://youtu.be/URL-1",
+    "https://youtu.be/URL-2",
+]
+
+
+# yt-dlp options for smallest size and fast performance
+ydl_opts = {
+    'format': 'worstvideo+bestaudio/bestaudio',   # Use worst video and best audio   you can chnage this to bestvideo+bestaudio
+    'merge_output_format': 'mp4',                 # Merge both into .mp4
+    'outtmpl': '%(title).100s.%(ext)s',           # Avoid too-long filenames
+    'noplaylist': True,                           # Avoid auto-playlist downloads
+    'quiet': True,                                # Suppress verbose output
+    'no_warnings': True,
+    'geo_bypass': True,
+}
+
+# Download all videos
+with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+    ydl.download(video_urls)
+
+print("\n✅ All videos downloaded (smallest size).")
