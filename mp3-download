@@ -1,0 +1,31 @@
+import yt_dlp
+
+# List of YouTube video URLs
+video_urls = [
+    "https://youtu.be/URL-0",
+    "https://youtu.be/URL-1",
+    "https://youtu.be/URL-2",
+]
+
+# yt-dlp options for MP3 download
+ydl_opts = {
+    'format': 'bestaudio/best',           # Get the best audio quality
+    'extractaudio': True,                 # Extract audio
+    'audioformat': 'mp3',                 # Convert to MP3
+    'outtmpl': '%(title).100s.%(ext)s',   # Output template
+    'noplaylist': True,                   # Avoid auto-playlist downloads
+    'quiet': True,                        # Suppress verbose output
+    'no_warnings': True,
+    'geo_bypass': True,
+    'postprocessors': [{                  # Post-processing to convert to MP3
+        'key': 'FFmpegExtractAudio',
+        'preferredcodec': 'mp3',
+        'preferredquality': '192',       # Audio quality (192 kbps)
+    }],
+}
+
+# Download all videos as MP3
+with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+    ydl.download(video_urls)
+
+print("\n✅ All videos downloaded as MP3 files.")
