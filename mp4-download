@@ -1,26 +1,65 @@
 import yt_dlp
+import os
 
-# List of YouTube video URLs
-video_urls = [
+# -----------------------------
+# CONFIG
+# -----------------------------
+
+VIDEO_URLS = [
     "https://youtu.be/URL-0",
     "https://youtu.be/URL-1",
     "https://youtu.be/URL-2",
 ]
 
+DOWNLOAD_DIR = "downloads"
 
-# yt-dlp options for smallest size and fast performance
+os.makedirs(DOWNLOAD_DIR, exist_ok=True)
+
+# -----------------------------
+# yt-dlp OPTIONS
+# -----------------------------
+
 ydl_opts = {
-    'format': 'worstvideo+bestaudio/bestaudio',   # Use worst video and best audio   you can chnage this to bestvideo+bestaudio
-    'merge_output_format': 'mp4',                 # Merge both into .mp4
-    'outtmpl': '%(title).100s.%(ext)s',           # Avoid too-long filenames
-    'noplaylist': True,                           # Avoid auto-playlist downloads
-    'quiet': True,                                # Suppress verbose output
-    'no_warnings': True,
-    'geo_bypass': True,
+    # SAFEST format selection (avoids blocked streams)
+    'format': 'bv*[ext=mp4]/b[ext=mp4]/b',
+
+    # Output
+    'outtmpl': os.path.join(DOWNLOAD_DIR, '%(title).100s.%(ext)s'),
+    'merge_output_format': 'mp4',
+
+    # Stability
+    'noplaylist': True,
+    'retries': 5,
+    'fragment_retries': 5,
+    'concurrent_fragment_downloads': 1,
+
+    # Anti-403 techniques
+    'cookiesfrombrowser': ('chrome',),   # change to 'edge' or 'firefox' if needed
+    'extractor_args': {
+        'youtube': {
+            'player_client': ['android']
+        }
+    },
+
+    # Headers
+    'http_headers': {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
+    },
+
+    # Logging
+    'quiet': False,
+    'no_warnings': False,
 }
 
-# Download all videos
-with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-    ydl.download(video_urls)
+# -----------------------------
+# DOWNLOAD
+# -----------------------------
 
-print("\n✅ All videos downloaded (smallest size).")
+def main():
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        ydl.download(VIDEO_URLS)
+
+    print("\n✅ All downloads completed successfully.")
+
+if __name__ == "__main__":
+    main()
